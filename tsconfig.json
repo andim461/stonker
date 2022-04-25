@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "lib": ["es2017"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+
+        "strict": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "keyofStringsOnly": true,
+        "noEmitOnError": true,
+        "skipLibCheck": true,
+
+        "esModuleInterop": true,
+
+        "baseUrl": ".",
+        "outDir": "out",
+        "sourceMap": true,
+        "declaration": true,
+
+        "types": [
+            "node",
+            "jest"
+        ]
+    },
+    "include": [
+        "packages",
+        "schedulers",
+        "scripts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
