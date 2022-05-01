@@ -1,32 +1,46 @@
 import React from 'react';
 import {Button, Card, Input, Typography, Form} from 'antd';
+import userDataStore from '../../store/userDataStore';
 
-import './login.scss';
+import './signup.scss';
 import {useNavigate} from 'react-router-dom';
 
 const {Text} = Typography;
 
-const LoginPage = () => {
+const SignupPage = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
 
-    const onSubmitLogin = () => {
+    const onSubmitSignup = () => {
         form.validateFields()
             .then(() => {
                 const values = form.getFieldsValue();
-                return fetch('/api/auth/signin', {
-                    method: 'POST',
-                    body: JSON.stringify({login: values.login, password: values.password})
-                });
+                if (values.password === values.password2) {
+                    return fetch('/api/auth/signup', {
+                        method: 'POST',
+                        body: JSON.stringify({login: values.login, password: values.password})
+                    });
+                }
+                throw Error('Validation');
             })
-            .then((res) => console.log(res))
-            .catch((error) => console.log(error));
+            .then((res) => res.json())
+            .then((res) => {
+                userDataStore.signUp(res.balance, res.token, res.stocks);
+                console.log(userDataStore);
+            })
+            .catch((error) => {
+                const values = form.getFieldsValue();
+                userDataStore.setError(
+                    values.password !== values.password2 ? 'Пароли не совпадают' : 'Поля невалидны или Ваш логин занят'
+                );
+                console.log(userDataStore.error);
+            });
     };
 
     return (
         <div className="login">
-            <Card className="login-card" title="Вход в аккаунт" bordered>
-                <Form form={form} onSubmitCapture={onSubmitLogin}>
+            <Card className="login-card" title="Регистрация" bordered>
+                <Form form={form} onSubmitCapture={onSubmitSignup}>
                     <div className="login-content">
                         Логин
                         <div className="login-spacer-s" />
@@ -68,25 +82,49 @@ const LoginPage = () => {
                         >
                             <Input type="password" placeholder="Пароль" />
                         </Form.Item>
+                        Пароль ещё раз
+                        <div className="login-spacer-s" />
+                        <Form.Item
+                            className="login-input"
+                            name="password2"
+                            rules={[
+                                {
+                                    required: true,
+                                    min: 8,
+                                    message: 'Пароль должен быть больше 7 символов',
+                                    validateTrigger: 'onSubmit'
+                                },
+                                {
+                                    pattern: /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/g,
+                                    validateTrigger: 'onSubmit',
+                                    message: 'Пароль должен состоять из цифр и прописных и строчных букв'
+                                },
+                                {}
+                            ]}
+                            validateFirst
+                        >
+                            <Input type="password" placeholder="Пароль" />
+                        </Form.Item>
                         <div className="login-spacer" />
                         <Form.Item>
                             <Button className="login-item" type="primary" htmlType="submit">
-                                Войти
+                                Зарегистрироваться
                             </Button>
                         </Form.Item>
                         <div className="login-spacer-xl" />
-                        <Button className="login-item" onClick={() => navigate('/signup')}>
-                            Зарегистрироваться
+                        <Button className="login-item" onClick={() => navigate('/login')}>
+                            Войти
                         </Button>
                         <div className="login-spacer-s" />
                         <Text className="login-item" italic>
-                            Нет аккаунта?
+                            Есть аккаунт?
                         </Text>
                     </div>
                 </Form>
             </Card>
+            <div className="error">{userDataStore.error}</div>
         </div>
     );
 };
 
-export default LoginPage;
+export default SignupPage;

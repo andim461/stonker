@@ -1,0 +1,39 @@
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    &-card {
+        width: 500px;
+    }
+
+    &-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &-input {
+        width: 75%;
+        
+    }
+
+    &-spacer-xl {
+        margin-top: 16px;
+    }
+
+    &-spacer-l {
+        margin-top: 12px;
+    }
+
+    &-spacer {
+        margin-top: 8px;
+    }
+
+    &-spacer-s {
+        margin-top: 4px;
+    }
+}

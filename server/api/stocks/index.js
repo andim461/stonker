@@ -46,13 +46,19 @@ stocks.post('/buy', async (req, res) => {
             res.send({error: 'Have not money', code: 1000});
             return;
         }
-        const currCount = user.stocks && req.body.tag in user.stocks ? user.stocks[req.body.tag] : 0;
+        const currCount = user.stocks && req.body.tag in user.stocks ? user.stocks[req.body.tag].count : 0;
+        const average = currCount
+            ? (user.stocks[req.body.tag].price * currCount + price) / (currCount + req.body.count)
+            : data.c;
         db.insert({
             ...user,
             balance: user.balance - price,
-            stocks: {...user.stocks, [req.body.tag]: currCount + req.body.count}
+            stocks: {...user.stocks, [req.body.tag]: {count: currCount + req.body.count, average}}
         });
-        res.send({balance: user.balance - price, stocks: {...user.stocks, [req.body.tag]: currCount + req.body.count}});
+        res.send({
+            balance: user.balance - price,
+            stocks: {...user.stocks, [req.body.tag]: {count: currCount + req.body.count, average}}
+        });
     });
 });
 
@@ -97,7 +103,7 @@ stocks.post('/sold', async (req, res) => {
     const finnhubClient = new finnhub.DefaultApi();
 
     finnhubClient.quote(req.body.tag, (error, data, response) => {
-        const currCount = user.stocks && req.body.tag in user.stocks ? user.stocks[req.body.tag] : 0;
+        const currCount = user.stocks && req.body.tag in user.stocks ? user.stocks[req.body.tag].count : 0;
         const price = data.c * req.body.count;
         if (currCount < req.body.count) {
             res.send({error: 'Have not stock', code: 1001});
@@ -106,9 +112,18 @@ stocks.post('/sold', async (req, res) => {
         db.insert({
             ...user,
             balance: user.balance + price,
-            stocks: {...user.stocks, [req.body.tag]: currCount - req.body.count}
+            stocks: {
+                ...user.stocks,
+                [req.body.tag]: {...user.stocks[req.body.tag], count: currCount - req.body.count}
+            }
         });
-        res.send({balance: user.balance + price, stocks: {...user.stocks, [req.body.tag]: currCount - req.body.count}});
+        res.send({
+            balance: user.balance + price,
+            stocks: {
+                ...user.stocks,
+                [req.body.tag]: {...user.stocks[req.body.tag], count: currCount - req.body.count}
+            }
+        });
     });
 });
 
