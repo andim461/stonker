@@ -63,6 +63,12 @@ const Market = () => {
                         }
                     >
                         <p>Страна: {stock.country}</p>
+                        <p>Биржа: {stock.exchange}</p>
+                        <p>Отрасль: {stock.finnhubIndustry}</p>
+                        <p>Рыночная капитализация: {stock.marketCapitalization} M</p>
+                        <Button type="link" href={stock.weburl} target="_blank" className="link">
+                            {stock.weburl}
+                        </Button>
                     </Card>
                 ))}
             </div>

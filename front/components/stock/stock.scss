@@ -1,0 +1,16 @@
+.graph {
+    height: 100%;
+    padding: 20px;
+    flex: 1;
+}
+
+.page {
+    height: 100%;
+}
+
+.content {
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}

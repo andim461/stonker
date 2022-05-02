@@ -3,6 +3,9 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-image: url('../images/bg.jpeg');
-    background-size: cover;
+    background: linear-gradient(90deg, rgba(181,33,33,1) 0%, rgba(9,21,121,1) 50%, rgba(0,91,193,1) 100%);
+    overflow-x: hidden;
+}
+.app {
+    height: 100%;
 }
