@@ -1,4 +1,4 @@
-import {makeAutoObservable} from 'mobx';
+import {makeAutoObservable, makeObservable} from 'mobx';
 
 interface Stock {
     tag: string;

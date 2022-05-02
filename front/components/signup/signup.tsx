@@ -4,6 +4,7 @@ import userDataStore from '../../store/userDataStore';
 
 import './signup.scss';
 import {useNavigate} from 'react-router-dom';
+import {observer} from 'mobx-react-lite';
 
 const {Text} = Typography;
 
@@ -33,7 +34,6 @@ const SignupPage = () => {
                 userDataStore.setError(
                     values.password !== values.password2 ? 'Пароли не совпадают' : 'Поля невалидны или Ваш логин занят'
                 );
-                console.log(userDataStore.error);
             });
     };
 
@@ -127,4 +127,4 @@ const SignupPage = () => {
     );
 };
 
-export default SignupPage;
+export default observer(SignupPage);

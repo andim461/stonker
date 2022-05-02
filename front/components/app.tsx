@@ -3,6 +3,7 @@ import LoginPage from './login/login';
 import './app.scss';
 import {HashRouter, Route, Routes} from 'react-router-dom';
 import SignupPage from './signup/signup';
+import {observer} from 'mobx-react-lite';
 
 const App: React.FC = () => {
     const isAuth = true;
@@ -19,4 +20,4 @@ const App: React.FC = () => {
     );
 };
 
-export default App;
+export default observer(App);

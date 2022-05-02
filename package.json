@@ -37,6 +37,7 @@
     "jsonwebtoken": "^8.5.1",
     "lint": "^0.7.0",
     "mobx": "^6.5.0",
+    "mobx-react-lite": "^3.3.0",
     "mongodb": "^4.5.0",
     "mongoose": "^6.2.10",
     "nano": "^10.0.0",
