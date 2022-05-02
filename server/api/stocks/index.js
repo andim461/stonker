@@ -166,4 +166,33 @@ stocks.get('/market', (req, res) => {
     }
 });
 
+stocks.post('/user', async (req, res) => {
+    const db = await dbConnect();
+
+    if (!req.body.token) {
+        res.sendStatus(402);
+        return;
+    }
+
+    let _id = null;
+
+    try {
+        _id = jwt.verify(req.body.token, SECRET_JWT)._id;
+    } catch (err) {
+        res.sendStatus(403);
+        return;
+    }
+
+    // ищем по id
+    const documents = await db.find({selector: {_id: {$eq: _id}}});
+
+    if (!documents.docs.length) {
+        console.log(documents, req.body.login);
+        res.sendStatus(403);
+        return;
+    }
+    const user = documents.docs[0];
+    res.send({...user, password: undefined});
+});
+
 module.exports = stocks;

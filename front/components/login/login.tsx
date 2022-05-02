@@ -3,6 +3,8 @@ import {Button, Card, Input, Typography, Form} from 'antd';
 
 import './login.scss';
 import {useNavigate} from 'react-router-dom';
+import userDataStore from '../../store/userDataStore';
+import {observer} from 'mobx-react-lite';
 
 const {Text} = Typography;
 
@@ -19,8 +21,16 @@ const LoginPage = () => {
                     body: JSON.stringify({login: values.login, password: values.password})
                 });
             })
-            .then((res) => console.log(res))
-            .catch((error) => console.log(error));
+            .then((res) => res.json())
+            .then((res) => {
+                userDataStore.signUp(res.balance, res.token, res.stocks, res.login);
+                localStorage.setItem('token', res.token);
+                console.log(userDataStore);
+                navigate('/home');
+            })
+            .catch((error) => {
+                userDataStore.setError('Неправильный логин и/или пароль');
+            });
     };
 
     return (
@@ -89,4 +99,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default observer(LoginPage);

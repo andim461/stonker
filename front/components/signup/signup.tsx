@@ -26,7 +26,9 @@ const SignupPage = () => {
             })
             .then((res) => res.json())
             .then((res) => {
-                userDataStore.signUp(res.balance, res.token, res.stocks);
+                userDataStore.signUp(res.balance, res.token, res.stocks, res.login);
+                localStorage.setItem('token', res.token);
+                navigate('/home');
                 console.log(userDataStore);
             })
             .catch((error) => {
