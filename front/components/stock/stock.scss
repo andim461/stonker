@@ -13,4 +13,23 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+    padding-right: 20px;
+}
+
+.action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &-button {
+        margin-left: 5px !important;
+    }
+
+    &-field {
+        margin-right: 5px !important;
+    }
+}
+
+.stock-card {
+    min-width: 300px;
 }

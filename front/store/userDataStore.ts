@@ -3,12 +3,12 @@ import {makeAutoObservable, makeObservable} from 'mobx';
 interface Stock {
     tag: string;
     count?: number;
-    avereage?: number;
+    average?: number;
 }
 class UserStore {
     balance: number = 0;
     token: string = '';
-    stocks: {tag: string; count?: number; price?: number}[] = [];
+    stocks: Stock[] = [];
     error: string = '';
     login: string = '';
     loading: boolean = false;
@@ -20,10 +20,10 @@ class UserStore {
         makeAutoObservable(this);
     }
 
-    signUp(balance: number, token: string, stocks: Stock[], login: string) {
+    signUp(balance: number, token: string, stocks: object, login: string) {
         this.balance = balance;
         this.token = token;
-        this.stocks = stocks;
+        this.prepareStocks(stocks || {});
         this.login = login;
     }
 
@@ -50,8 +50,8 @@ class UserStore {
             })
                 .then((res) => res.json())
                 .then((res) => {
-                    console.log(res);
-                    this.stocks = res.stocks;
+                    console.log(res.stocks, 'here');
+                    this.prepareStocks(res.stocks || {});
                     this.login = res.login;
                     this.balance = res.balance;
                 })
@@ -65,12 +65,25 @@ class UserStore {
         }
     }
 
+    prepareStocks(stocks: object) {
+        this.stocks = [];
+        for (let [key, value] of Object.entries(stocks)) {
+            this.stocks.push({...value, tag: key});
+        }
+        console.log(this.stocks);
+    }
+
     setLoading(isLoading: boolean) {
         this.loading = isLoading;
     }
 
     setCurrentTicker(ticker: string) {
         this.currentTicker = ticker;
+    }
+
+    marketAction(balance: number, stocks: object) {
+        this.balance = balance;
+        this.prepareStocks(stocks || {});
     }
 }
 export default new UserStore();

@@ -41,7 +41,7 @@ const header = () => {
                 onClick={() => navigate('/home')}
                 danger
             >
-                {userDataStore.login} | {userDataStore.balance}$
+                {userDataStore.login} | {userDataStore.balance.toFixed(2)}$
             </Button>
         </div>
     );

@@ -48,7 +48,7 @@ stocks.post('/buy', async (req, res) => {
         }
         const currCount = user.stocks && req.body.tag in user.stocks ? user.stocks[req.body.tag].count : 0;
         const average = currCount
-            ? (user.stocks[req.body.tag].price * currCount + price) / (currCount + req.body.count)
+            ? (user.stocks[req.body.tag].average * currCount + price) / (currCount + req.body.count)
             : data.c;
         db.insert({
             ...user,
@@ -135,7 +135,6 @@ stocks.get('/market', (req, res) => {
             const json = JSON.parse(fileData);
             data.push(json);
         }
-        console.log(data);
         const tags = data.map((value) => value.ticker);
         if (tags.length !== STOCK_TAGS.length) {
             throw new Error('Have not all tags');
